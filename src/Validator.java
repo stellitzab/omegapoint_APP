@@ -35,7 +35,7 @@ public class Validator {
 
     }
 
-    public static boolean runValidityCheck(String number) throws InvalidDayFormatException, InvalidYearException, InvalidMonthException, InvalidControlNumberException {
+    public static boolean runValidityCheck(String number) {
 
         PersonalNumberCheck numberCheck = new PersonalNumberCheck(number);
         int result = numberCheck.runCheck();

@@ -18,7 +18,7 @@ public class PersonalNumberCheck {
 
     }
 
-    public int runCheck() throws InvalidDayFormatException, InvalidYearException, InvalidMonthException, InvalidControlNumberException {
+    public int runCheck() {
         System.out.println("Testing format... ");
         if(checkFormat()) {
                 System.out.println("PASSED");
@@ -33,7 +33,7 @@ public class PersonalNumberCheck {
         return ((this.number.length() <= 13) && (this.number.length() >= 10));
     }
 
-    public boolean checkFormat() throws InvalidYearException, InvalidDayFormatException, InvalidMonthException, InvalidControlNumberException {
+    public boolean checkFormat() {
         if(checkLength()) {
             if (checkYearFormat()) {
                 if (checkMonthFormat()) {
@@ -106,7 +106,7 @@ public class PersonalNumberCheck {
         } 
     }
 
-    private boolean checkDateFormat() throws InvalidDayFormatException {
+    private boolean checkDateFormat() {
 
         String day;
         if(this.isTwelveDigits) {
@@ -134,7 +134,7 @@ public class PersonalNumberCheck {
         }
     }
 
-    private boolean checkMonthFormat() throws InvalidMonthException {
+    private boolean checkMonthFormat() {
 
         String month;
         if(this.isTwelveDigits) {
@@ -162,7 +162,7 @@ public class PersonalNumberCheck {
         }
     }
 
-    private boolean checkYearFormat() throws InvalidYearException {
+    private boolean checkYearFormat() {
         if(this.number.length() <= 13 && this.number.length() >= 12) {
             int century = Integer.parseInt(this.number.substring(0,2));
             if((century <= 20) && (century >= 18))  {
@@ -186,7 +186,7 @@ public class PersonalNumberCheck {
         this.isTwelveDigits = twelveDigit;
     }
 
-    public boolean checkLuhns() throws InvalidControlNumberException {
+    public boolean checkLuhns() {
 
         int sum = 0;
         int actualVal = Integer.parseInt(this.number.substring(number.length()-1));

@@ -17,7 +17,7 @@ public class ValidityCheckTest {
     }
 
     @Test
-    public void testValid12DigitsFor matWithDelimitor() {
+    public void testValid12DigitsFormatWithDelimitor() {
         assertTrue(Validator.runValidityCheck("19961016-3587"));
     }
 
