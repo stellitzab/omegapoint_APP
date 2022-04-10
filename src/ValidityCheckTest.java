@@ -6,23 +6,6 @@ import static org.junit.Assert.*;
 
 public class ValidityCheckTest {
 
-
-    @Test
-    public void testDate(){
-
-        DateCheck datecheck = new DateCheck("34");
-        assertFalse(datecheck.getResult());
-
-    }
-
-    @Test
-    public void testYear(){
-
-        DateCheck datecheck = new DateCheck("32");
-        assertFalse(datecheck.getResult());
-
-    }
-
     @Test
     public void testValid10DigitsFormat() {
         assertTrue(Validator.runValidityCheck("9610163587"));
@@ -34,13 +17,13 @@ public class ValidityCheckTest {
     }
 
     @Test
-    public void testValid12DigitsFormatWithDelimitor() {
+    public void testValid12DigitsFor matWithDelimitor() {
         assertTrue(Validator.runValidityCheck("19961016-3587"));
     }
 
     @Test
-    public void testValid12DigitsFormatWithDelimitorPlus() {
-        assertTrue(Validator.runValidityCheck("19961016+3587"));
+    public void testValid10DigitsFormatWithDelimitorPlus() {
+        assertTrue(Validator.runValidityCheck("961016+3587"));
     }
 
     @Test

@@ -1,3 +1,11 @@
+import Exceptions.InvalidControlNumberException;
+import Exceptions.InvalidDayFormatException;
+import Exceptions.InvalidMonthException;
+import Exceptions.InvalidYearException;
+
+import java.security.spec.ECField;
+import java.util.Arrays;
+
 public class PersonalNumberCheck {
 
     private boolean isTwelveDigits = false;
@@ -10,36 +18,31 @@ public class PersonalNumberCheck {
 
     }
 
-    public int runCheck() {
+    public int runCheck() throws InvalidDayFormatException, InvalidYearException, InvalidMonthException, InvalidControlNumberException {
         System.out.println("Testing format... ");
-        if(checkLength(this.number)) {
-            if(checkFormat()) {
+        if(checkFormat()) {
                 System.out.println("PASSED");
             }
             else {
                 System.out.println("FAILED");
             }
-        }
-
         return 0;
     }
 
-    public static boolean checkLength(String string) {
-        return ((string.length() <= 13) && (string.length() >= 10));
+    public boolean checkLength() {
+        return ((this.number.length() <= 13) && (this.number.length() >= 10));
     }
 
-    //Check all numbers??
-
-    public boolean checkFormat() {
-        if(checkYearFormat()) {
-            if(checkMonthFormat()) {
-                if(checkDateFormat()) {
-                    //Checkdelimiter (must be + or -)
-                    //Convert to standard format in order to perform Luhns
-
-
-                    if(checkLuhns()) {
-                        return true;
+    public boolean checkFormat() throws InvalidYearException, InvalidDayFormatException, InvalidMonthException, InvalidControlNumberException {
+        if(checkLength()) {
+            if (checkYearFormat()) {
+                if (checkMonthFormat()) {
+                    if (checkDateFormat()) {
+                        checkDelimiter();
+                        convertFormat();
+                        if (checkLuhns()) {
+                            return true;
+                        }
                     }
                 }
             }
@@ -47,7 +50,63 @@ public class PersonalNumberCheck {
         return false;
     }
 
-    private boolean checkDateFormat() {
+    private void checkDelimiter() {
+
+        if(this.isTwelveDigits) {
+            if(this.number.length() == 13) {
+                char delimiter = this.number.charAt(8);
+                System.out.println("delimiter: " + delimiter);
+                if(delimiter == '-') {
+                    this.hasDelimiter = true;
+                }
+                else {
+                    this.hasDelimiter = false;
+                }
+            }
+            else {
+                this.hasDelimiter = false;
+            }
+        }
+        else {
+            // Possibly obsolete checks?? 
+            if(this.number.length() == 11) {
+                char delimiter = this.number.charAt(6);
+                System.out.println("delimiter: " + delimiter);
+                if(delimiter == '-' || delimiter == '+') {
+                    this.hasDelimiter = true;
+                }
+                else {
+                    this.hasDelimiter = false;
+                }
+            }
+            else {
+                this.hasDelimiter = false;
+            }
+        }
+
+    }
+
+    private void convertFormat() {
+        //String[] seperatePlus = this.number.split("+");
+        if(isTwelveDigits) {
+            //remove century numbers
+            this.number = this.number.substring(2);
+            if(hasDelimiter) {
+                String[] seperateDash = this.number.split("-|\\+");
+                System.out.println("String after split: " + Arrays.toString(seperateDash));
+                this.number = seperateDash[0] + seperateDash [1];
+            }
+        }
+        else {
+             if(hasDelimiter) {
+                String[] seperateDash = this.number.split("-|\\+");
+                System.out.println("String after split: " + Arrays.toString(seperateDash));
+                this.number = seperateDash[0] + seperateDash [1];
+            }
+        } 
+    }
+
+    private boolean checkDateFormat() throws InvalidDayFormatException {
 
         String day;
         if(this.isTwelveDigits) {
@@ -75,7 +134,7 @@ public class PersonalNumberCheck {
         }
     }
 
-    private boolean checkMonthFormat() {
+    private boolean checkMonthFormat() throws InvalidMonthException {
 
         String month;
         if(this.isTwelveDigits) {
@@ -103,7 +162,7 @@ public class PersonalNumberCheck {
         }
     }
 
-    private boolean checkYearFormat() {
+    private boolean checkYearFormat() throws InvalidYearException {
         if(this.number.length() <= 13 && this.number.length() >= 12) {
             int century = Integer.parseInt(this.number.substring(0,2));
             if((century <= 20) && (century >= 18))  {
@@ -127,23 +186,29 @@ public class PersonalNumberCheck {
         this.isTwelveDigits = twelveDigit;
     }
 
-    public boolean checkLuhns() {
+    public boolean checkLuhns() throws InvalidControlNumberException {
 
         int sum = 0;
         int actualVal = Integer.parseInt(this.number.substring(number.length()-1));
 
+        System.out.println("Actual value " + actualVal);        
+
         for (int i = 0; i < this.number.length() - 1 ; i++) {
 
-            if (!(this.number.charAt(i) == '-' || this.number.charAt(i) == '+')) {
-                if (i % 2 == 0) {
-                    sum = sum + 2 * Integer.parseInt(this.number.substring(i));
-                } else {
-                    sum = sum + Integer.parseInt(this.number.substring(i));
+            if (i % 2 == 0) {
+                int doubleSum = 2 *  Integer.parseInt(this.number.substring(i, i+1));
+                if(doubleSum >= 10) {
+                    doubleSum = Integer.parseInt(this.number.substring(i, i+1)) + (Integer.parseInt(this.number.substring(i, i+1)) - 9);
                 }
+                sum = sum + doubleSum;
+            } else {
+                sum = sum + Integer.parseInt(this.number.substring(i, i+1));
             }
         }
         int calculatedResult = (10 - (sum % 10)) % 10;
         return calculatedResult == actualVal;
     }
+
+    //TODO: use exceptions to find out where in the checks we fail, if numberexception means there is characters not allowed etc. Break out the similar functions into interface? Display messages according to how it performs. 
 
 }
