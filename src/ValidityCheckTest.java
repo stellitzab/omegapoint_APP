@@ -1,7 +1,5 @@
 import org.junit.Test;
 
-import java.text.Normalizer;
-
 import static org.junit.Assert.*;
 
 public class ValidityCheckTest {
@@ -42,13 +40,33 @@ public class ValidityCheckTest {
     }
 
     @Test
+    public void testInvalidPersonalNumber() {
+        assertFalse(Validator.runValidityCheck("201701272394"));
+    }
+
+    @Test
     public void testInvalidYear12DigitsFormat() {
         assertFalse(Validator.runValidityCheck("159610163587"));
     }
 
     @Test
     public void testInvalidControlNumber() {
-        assertTrue(Validator.runValidityCheck("9610163588"));
+        assertFalse(Validator.runValidityCheck("9610163588"));
+    }
+
+    @Test
+    public void testValidSamordningsNumber() {
+        assertTrue(Validator.runValidityCheck("190910799824"));
+    }
+
+    @Test
+    public void testValidOrganisationsNumber() {
+        assertTrue(Validator.runValidityCheck("16556601-6399"));
+    }
+
+    @Test
+    public void testAnotherValidOrganisationsNumber() {
+        assertTrue(Validator.runValidityCheck("556614-3185"));
     }
 
 
