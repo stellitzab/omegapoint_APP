@@ -69,10 +69,4 @@ public class ValidityCheckTest {
         assertTrue(Validator.runValidityCheck("556614-3185"));
     }
 
-
-
-
-
-
-
 }

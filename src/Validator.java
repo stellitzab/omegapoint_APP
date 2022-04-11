@@ -7,7 +7,7 @@ public class Validator {
 
         boolean running = true;
         while(running) {
-            System.out.println("This program checks personnummer to see if they are valid.\n Please insert a number here and confirm with enter: ");
+            System.out.println("\n This program checks personnummer to see if they are valid.\n Please insert a number here and confirm with enter: ");
             Scanner scanner = new Scanner(System.in);
             String number = scanner.nextLine();
             if (runValidityCheck(number)) {
